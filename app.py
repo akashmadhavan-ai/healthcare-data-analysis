@@ -18,6 +18,21 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
+# LOAD CSS
+# ─────────────────────────────────────────────
+
+def load_css():
+
+    with open("assets/style.css") as f:
+
+        st.markdown(
+            f"<style>{f.read()}</style>",
+            unsafe_allow_html=True
+        )
+
+load_css()
+
+# ─────────────────────────────────────────────
 # SIDEBAR
 # ─────────────────────────────────────────────
 
@@ -36,6 +51,7 @@ with st.sidebar:
 
     st.markdown("""
     ### Features
+
     ✅ Auto Cleaning  
     ✅ Dynamic Charts  
     ✅ Statistical Analysis  
@@ -82,7 +98,8 @@ if uploaded_file is None:
     - Creates statistical summaries
     - Produces automated insights
 
-    Works with:
+    ### Works with:
+
     - Diabetes datasets
     - Heart disease datasets
     - Hospital records
@@ -93,7 +110,7 @@ if uploaded_file is None:
     st.stop()
 
 # ─────────────────────────────────────────────
-# LOAD DATA
+# LOAD & CLEAN DATA
 # ─────────────────────────────────────────────
 
 @st.cache_data
@@ -135,11 +152,27 @@ visualizer = DataVisualizer(df_clean)
 
 target_col = analyzer.detect_target_column()
 
+overview = analyzer.get_overview()
+
+# ─────────────────────────────────────────────
+# HEADER
+# ─────────────────────────────────────────────
+
+st.title("📊 Healthcare Analytics Dashboard")
+
+st.markdown("""
+Analyze healthcare datasets instantly with:
+- automated cleaning
+- statistical analysis
+- visual insights
+- dynamic charts
+""")
+
+st.divider()
+
 # ─────────────────────────────────────────────
 # TOP METRICS
 # ─────────────────────────────────────────────
-
-overview = analyzer.get_overview()
 
 col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -271,19 +304,16 @@ with tab3:
             f"Detected Target Column: {target_col}"
         )
 
-        target_analysis = analyzer\
-            .get_target_analysis(target_col)
+        target_analysis = analyzer.get_target_analysis(
+            target_col
+        )
 
         cols = st.columns(
-            len(
-                target_analysis["distribution"]
-            )
+            len(target_analysis["distribution"])
         )
 
         for i, (k, v) in enumerate(
-            target_analysis[
-                "distribution"
-            ].items()
+            target_analysis["distribution"].items()
         ):
 
             pct = target_analysis[
@@ -304,8 +334,9 @@ with tab3:
 
     if outliers:
 
-        outlier_chart = visualizer\
-            .outlier_chart(outliers)
+        outlier_chart = visualizer.outlier_chart(
+            outliers
+        )
 
         if outlier_chart:
 
@@ -328,8 +359,7 @@ with tab4:
 
     st.subheader("Interactive Visualizations")
 
-    heatmap = visualizer\
-        .correlation_heatmap()
+    heatmap = visualizer.correlation_heatmap()
 
     if heatmap:
 

@@ -1,1 +1,148 @@
+/* ─────────────────────────────────────
+   GLOBAL APP
+───────────────────────────────────── */
 
+html, body, [class*="css"] {
+    font-family: "Inter", sans-serif;
+}
+
+/* Main background */
+
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #0f172a,
+        #020617
+    );
+    color: white;
+}
+
+/* ─────────────────────────────────────
+   SIDEBAR
+───────────────────────────────────── */
+
+section[data-testid="stSidebar"] {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ─────────────────────────────────────
+   HEADINGS
+───────────────────────────────────── */
+
+h1 {
+    font-size: 3rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -1px;
+}
+
+h2, h3 {
+    font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────
+   CARDS / CONTAINERS
+───────────────────────────────────── */
+
+div[data-testid="stMetric"] {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 20px;
+    border-radius: 18px;
+    backdrop-filter: blur(14px);
+
+    transition: all 0.3s ease;
+}
+
+div[data-testid="stMetric"]:hover {
+    transform: translateY(-4px);
+    border: 1px solid #3b82f6;
+}
+
+/* ─────────────────────────────────────
+   BUTTONS
+───────────────────────────────────── */
+
+.stButton > button {
+    width: 100%;
+    border-radius: 14px;
+    border: none;
+    padding: 12px 18px;
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+    color: white;
+    font-weight: 600;
+
+    transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+    transform: scale(1.02);
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #2563eb
+    );
+}
+
+/* ─────────────────────────────────────
+   FILE UPLOADER
+───────────────────────────────────── */
+
+[data-testid="stFileUploader"] {
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+/* ─────────────────────────────────────
+   DATAFRAMES
+───────────────────────────────────── */
+
+[data-testid="stDataFrame"] {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ─────────────────────────────────────
+   TABS
+───────────────────────────────────── */
+
+button[data-baseweb="tab"] {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+button[data-baseweb="tab"]:hover {
+    color: #60a5fa;
+}
+
+/* ─────────────────────────────────────
+   ALERT BOXES
+───────────────────────────────────── */
+
+.stSuccess,
+.stWarning,
+.stInfo,
+.stError {
+    border-radius: 16px;
+}
+
+/* ─────────────────────────────────────
+   SCROLLBAR
+───────────────────────────────────── */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 20px;
+}
