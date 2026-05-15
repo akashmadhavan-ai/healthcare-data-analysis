@@ -1,110 +1,568 @@
-# 🔀 Healthcare Analytics Git Workflow
+# Healthcare Data Analysis — Git Workflow Guide
 
-# 🌳 Branch Structure
+# 1. Introduction
+
+This document explains the Git workflow used in the Healthcare Data Analysis project.
+
+The purpose of this workflow is to ensure:
+
+- Structured development
+- Safe collaboration
+- Controlled releases
+- Stable production branches
+- Proper feature isolation
+- Easier debugging
+- Clean project history
+
+This project follows a multi-branch development strategy commonly used in professional software engineering workflows.
+
+---
+
+# 2. Why Git Workflow Matters
+
+Without a proper Git workflow:
+
+- Code becomes unstable
+- Bugs spread into production
+- Features become difficult to track
+- Collaboration becomes messy
+- Rollbacks become dangerous
+
+A structured Git workflow improves:
+
+| Benefit | Description |
+|---------|-------------|
+| Stability | Protects production code |
+| Isolation | Keeps features separate |
+| Traceability | Easier commit tracking |
+| Collaboration | Multiple developers can work safely |
+| Testing | Enables staged validation |
+| Recovery | Easier rollback management |
+
+---
+
+# 3. Branch Architecture
+
+The project uses a layered branch architecture.
 
 ```plaintext
 main
-↑
+│
 staging
-↑
+│
 dev
-↑
+│
 feature/*
+│
+bugfix/*
 ```
 
 ---
 
-# 📌 Branch Purpose
-
-| Branch     | Purpose                         |
-| ---------- | ------------------------------- |
-| main       | Stable production-ready version |
-| staging    | Pre-release testing branch      |
-| dev        | Main development branch         |
-| feature/\* | Individual feature development  |
-| bugfix/\*  | Individual bug fixes            |
+# 4. Branch Responsibilities
 
 ---
 
-# 🚀 INITIAL SETUP
+# 4.1 main Branch
 
-## Clone Repository
+## Purpose
 
-```bash
-git clone https://github.com/akashmadhavan-ai/healthcare-data-analysis.git
+Production-ready stable branch.
+
+## Characteristics
+
+- Always stable
+- Fully tested
+- Release-ready
+- Protected branch
+
+## Rules
+
+- Never code directly on main
+- Only merge tested code
+- Only receives validated releases
+
+---
+
+# 4.2 staging Branch
+
+## Purpose
+
+Pre-production validation branch.
+
+## Characteristics
+
+- Used for integration testing
+- Final validation before production
+- Simulates release environment
+
+## Rules
+
+- Receives tested code from dev
+- Used for release verification
+- No direct feature development
+
+---
+
+# 4.3 dev Branch
+
+## Purpose
+
+Main active development branch.
+
+## Characteristics
+
+- Integration branch
+- Receives completed features
+- Used for combined development testing
+
+## Rules
+
+- Feature branches merge into dev
+- Not fully production-safe
+- Used for active development
+
+---
+
+# 4.4 feature/* Branches
+
+## Purpose
+
+Feature isolation branches.
+
+## Examples
+
+```plaintext
+feature/analytics-core
+feature/dashboard-system
+feature/pdf-export
+feature/dynamic-filters
+```
+
+## Characteristics
+
+- Temporary branches
+- Independent feature development
+- Isolated experimentation
+
+## Rules
+
+- Created from dev
+- Merged back into dev
+- Deleted after merge
+
+---
+
+# 4.5 bugfix/* Branches
+
+## Purpose
+
+Bug correction branches.
+
+## Examples
+
+```plaintext
+bugfix/import-error
+bugfix/streamlit-crash
+bugfix/report-generation
+```
+
+## Characteristics
+
+- Focused issue resolution
+- Small isolated fixes
+
+## Rules
+
+- Created from dev or staging
+- Merged back after fix validation
+
+---
+
+# 5. Full Development Workflow
+
+The recommended development flow:
+
+```plaintext
+Create Feature Branch
+        ↓
+Develop Feature
+        ↓
+Run Tests
+        ↓
+Commit Changes
+        ↓
+Push Feature Branch
+        ↓
+Merge into dev
+        ↓
+Merge into staging
+        ↓
+Validation Testing
+        ↓
+Merge into main
+        ↓
+Production Release
 ```
 
 ---
 
-## Move Into Repository
+# 6. Feature Development Workflow
+
+---
+
+# Step 1 — Update dev Branch
+
+Before creating a feature branch:
 
 ```bash
-cd healthcare-data-analysis
+git checkout dev
+git pull origin dev
+```
+
+Purpose:
+- Ensure latest development updates
+- Prevent merge conflicts
+
+---
+
+# Step 2 — Create Feature Branch
+
+Example:
+
+```bash
+git checkout -b feature/analytics-core
+```
+
+Naming convention:
+
+```plaintext
+feature/feature-name
 ```
 
 ---
 
-# 🌿 CREATE MAIN BRANCHES
+# Step 3 — Develop Feature
 
-## Create Dev Branch
+Write:
+- code
+- tests
+- documentation
+
+inside the feature branch.
+
+---
+
+# Step 4 — Verify Branch
 
 ```bash
-git checkout -b dev
+git branch
 ```
 
-```bash
-git push -u origin dev
+Expected:
+
+```plaintext
+* feature/analytics-core
 ```
 
 ---
 
-## Create Staging Branch
+# Step 5 — Stage Files
 
 ```bash
-git checkout -b staging
-```
-
-```bash
-git push -u origin staging
+git add .
 ```
 
 ---
 
-# ✨ FEATURE DEVELOPMENT WORKFLOW
+# Step 6 — Commit Changes
 
-# STEP 1 — SWITCH TO DEV
+Example:
+
+```bash
+git commit -m "feat: implement analytics core infrastructure"
+```
+
+---
+
+# Step 7 — Push Feature Branch
+
+First push:
+
+```bash
+git push -u origin feature/analytics-core
+```
+
+Later pushes:
+
+```bash
+git push
+```
+
+---
+
+# Step 8 — Merge into dev
+
+Switch to dev:
 
 ```bash
 git checkout dev
 ```
 
----
-
-# STEP 2 — PULL LATEST DEV
+Pull latest changes:
 
 ```bash
 git pull origin dev
 ```
 
----
-
-# STEP 3 — CREATE FEATURE BRANCH
-
-Example:
+Merge:
 
 ```bash
-git checkout -b feature/sample-loader
+git merge feature/analytics-core
+```
+
+Push dev:
+
+```bash
+git push origin dev
 ```
 
 ---
 
-# STEP 4 — DEVELOP FEATURE
+# Step 9 — Merge dev into staging
 
-Make code changes.
+```bash
+git checkout staging
+git pull origin staging
+git merge dev
+git push origin staging
+```
+
+Purpose:
+- Integration testing
+- Validation testing
 
 ---
 
-# STEP 5 — CHECK STATUS
+# Step 10 — Merge staging into main
+
+```bash
+git checkout main
+git pull origin main
+git merge staging
+git push origin main
+```
+
+Purpose:
+- Production release
+
+---
+
+# 7. Bug Fix Workflow
+
+---
+
+# Step 1 — Create Bugfix Branch
+
+Example:
+
+```bash
+git checkout -b bugfix/report-error
+```
+
+---
+
+# Step 2 — Apply Fix
+
+Correct:
+- logic errors
+- import issues
+- visualization bugs
+
+---
+
+# Step 3 — Commit Fix
+
+```bash
+git commit -m "fix: resolve report generation issue"
+```
+
+---
+
+# Step 4 — Merge Fix
+
+Merge into:
+- dev
+- staging
+- main
+
+depending on severity.
+
+---
+
+# 8. Branch Naming Conventions
+
+---
+
+# Feature Branches
+
+Format:
+
+```plaintext
+feature/feature-name
+```
+
+Examples:
+
+```plaintext
+feature/dashboard-system
+feature/pdf-export
+feature/data-cleaning
+```
+
+---
+
+# Bugfix Branches
+
+Format:
+
+```plaintext
+bugfix/issue-name
+```
+
+Examples:
+
+```plaintext
+bugfix/import-error
+bugfix/chart-rendering
+```
+
+---
+
+# Hotfix Branches
+
+Format:
+
+```plaintext
+hotfix/critical-issue
+```
+
+Examples:
+
+```plaintext
+hotfix/security-patch
+hotfix/production-crash
+```
+
+---
+
+# 9. Commit Message Standards
+
+Commit messages must follow structured prefixes.
+
+---
+
+# 9.1 Feature Commits
+
+Prefix:
+
+```plaintext
+feat:
+```
+
+Example:
+
+```bash
+git commit -m "feat: implement visualization engine"
+```
+
+---
+
+# 9.2 Bug Fix Commits
+
+Prefix:
+
+```plaintext
+fix:
+```
+
+Example:
+
+```bash
+git commit -m "fix: resolve missing value handling issue"
+```
+
+---
+
+# 9.3 Documentation Commits
+
+Prefix:
+
+```plaintext
+docs:
+```
+
+Example:
+
+```bash
+git commit -m "docs: update architecture documentation"
+```
+
+---
+
+# 9.4 Refactor Commits
+
+Prefix:
+
+```plaintext
+refactor:
+```
+
+Example:
+
+```bash
+git commit -m "refactor: optimize analytics pipeline"
+```
+
+---
+
+# 9.5 Testing Commits
+
+Prefix:
+
+```plaintext
+test:
+```
+
+Example:
+
+```bash
+git commit -m "test: add analyzer unit tests"
+```
+
+---
+
+# 9.6 Release Commits
+
+Prefix:
+
+```plaintext
+release:
+```
+
+Example:
+
+```bash
+git commit -m "release: deploy analytics system v1.0"
+```
+
+---
+
+# 10. Git Status Commands
+
+---
+
+# Verify Current Status
 
 ```bash
 git status
@@ -112,103 +570,51 @@ git status
 
 ---
 
-# STEP 6 — ADD FILES
+# Verify Current Branch
 
 ```bash
-git add .
+git branch
 ```
 
 ---
 
-# STEP 7 — COMMIT CHANGES
-
-Example:
+# View Branch Tracking
 
 ```bash
-git commit -m "feat: implement sample healthcare dataset loader"
+git branch -vv
 ```
 
 ---
 
-# STEP 8 — PUSH FEATURE BRANCH
+# View Commit History
 
 ```bash
-git push -u origin feature/sample-loader
+git log --oneline
 ```
 
 ---
 
-# 🔁 MERGE FEATURE → DEV
+# 11. Remote Repository Workflow
 
-# STEP 1 — SWITCH TO DEV
+---
+
+# Add Remote Repository
 
 ```bash
-git checkout dev
+git remote add origin <repo-url>
 ```
 
 ---
 
-# STEP 2 — MERGE FEATURE
+# Verify Remote
 
 ```bash
-git merge feature/sample-loader
+git remote -v
 ```
 
 ---
 
-# STEP 3 — PUSH DEV
-
-```bash
-git push origin dev
-```
-
----
-
-# 🧪 MERGE DEV → STAGING
-
-# STEP 1 — SWITCH TO STAGING
-
-```bash
-git checkout staging
-```
-
----
-
-# STEP 2 — MERGE DEV
-
-```bash
-git merge dev
-```
-
----
-
-# STEP 3 — PUSH STAGING
-
-```bash
-git push origin staging
-```
-
----
-
-# 🚀 MERGE STAGING → MAIN
-
-# STEP 1 — SWITCH TO MAIN
-
-```bash
-git checkout main
-```
-
----
-
-# STEP 2 — MERGE STAGING
-
-```bash
-git merge staging
-```
-
----
-
-# STEP 3 — PUSH MAIN
+# Push Main Branch
 
 ```bash
 git push origin main
@@ -216,253 +622,249 @@ git push origin main
 
 ---
 
-# 🐞 BUGFIX WORKFLOW
+# 12. Merge Conflict Handling
 
-# STEP 1 — SWITCH TO DEV
+---
 
-```bash
-git checkout dev
+# Symptoms
+
+```plaintext
+CONFLICT (content)
 ```
 
 ---
 
-# STEP 2 — CREATE BUGFIX BRANCH
+# Conflict Markers
+
+Example:
+
+```plaintext
+<<<<<<< HEAD
+=======
+>>>>>>> branch-name
+```
+
+---
+
+# Resolution Process
+
+1. Open conflicted file
+2. Remove conflict markers
+3. Keep correct code
+4. Save file
+5. Stage file
+6. Commit merge
+
+---
+
+# 13. Branch Cleanup
+
+After successful merge:
+
+---
+
+# Delete Local Branch
+
+```bash
+git branch -d feature/analytics-core
+```
+
+---
+
+# Delete Remote Branch
+
+```bash
+git push origin --delete feature/analytics-core
+```
+
+---
+
+# 14. Recommended Daily Workflow
+
+```plaintext
+Pull latest dev
+        ↓
+Create feature branch
+        ↓
+Develop feature
+        ↓
+Run tests
+        ↓
+Commit changes
+        ↓
+Push feature branch
+        ↓
+Merge into dev
+```
+
+---
+
+# 15. Testing Before Merge
+
+Before merging into dev:
+
+- Run unit tests
+- Verify visualizations
+- Verify reports
+- Check imports
+- Check dependencies
 
 Example:
 
 ```bash
-git checkout -b bugfix/chart-rendering
+python -m tests.test_loader
+python -m tests.test_analyzer
 ```
 
 ---
 
-# STEP 3 — FIX ISSUE
-
-Make required changes.
+# 16. Git Best Practices
 
 ---
 
-# STEP 4 — ADD FILES
+## Never Code Directly on main
 
-```bash
-git add .
+Reason:
+- Prevent production instability
+
+---
+
+## Always Use Feature Branches
+
+Reason:
+- Safer development
+- Easier rollback
+
+---
+
+## Commit Frequently
+
+Reason:
+- Easier debugging
+- Smaller change tracking
+
+---
+
+## Use Meaningful Commit Messages
+
+Bad:
+
+```plaintext
+update
 ```
 
----
+Good:
 
-# STEP 5 — COMMIT FIX
-
-```bash
-git commit -m "fix: resolve chart rendering issue"
-```
-
----
-
-# STEP 6 — PUSH BUGFIX
-
-```bash
-git push -u origin bugfix/chart-rendering
-```
-
----
-
-# STEP 7 — MERGE BUGFIX → DEV
-
-```bash
-git checkout dev
-```
-
----
-
-```bash
-git merge bugfix/chart-rendering
-```
-
----
-
-```bash
-git push origin dev
+```plaintext
+feat: implement healthcare analytics dashboard
 ```
 
 ---
 
-# 🔄 SYNC BRANCHES
-
-## Update Dev From Main
-
-```bash
-git checkout dev
-```
-
-```bash
-git merge main
-```
-
-```bash
-git push origin dev
-```
-
----
-
-## Update Staging From Main
-
-```bash
-git checkout staging
-```
-
-```bash
-git merge main
-```
-
-```bash
-git push origin staging
-```
-
----
-
-# 📥 PULL LATEST CHANGES
-
-## Pull Main
-
-```bash
-git checkout main
-```
-
-```bash
-git pull origin main
-```
-
----
-
-## Pull Dev
-
-```bash
-git checkout dev
-```
+## Pull Before Push
 
 ```bash
 git pull origin dev
 ```
 
----
-
-# 📤 PUSH CURRENT BRANCH
-
-```bash
-git push origin <branch-name>
-```
-
-Example:
-
-```bash
-git push origin dev
-```
+Reason:
+- Avoid merge conflicts
 
 ---
 
-# 🧹 DELETE FEATURE BRANCH
+# 17. Common Git Problems
 
-## Delete Local Branch
+---
+
+# Problem — No Upstream Branch
+
+Solution:
 
 ```bash
-git branch -d feature/sample-loader
+git push -u origin branch-name
 ```
 
 ---
 
-## Delete Remote Branch
+# Problem — Detached HEAD
+
+Solution:
 
 ```bash
-git push origin --delete feature/sample-loader
+git checkout branch-name
 ```
 
 ---
 
-# 🧠 IMPORTANT RULES
+# Problem — Changes Not Appearing on GitHub
 
-## NEVER DEVELOP DIRECTLY ON MAIN
+Solution:
 
-Correct:
+```bash
+git push
+```
+
+---
+
+# Problem — Wrong Branch Commit
+
+Solution:
+
+```bash
+git cherry-pick commit-id
+```
+
+---
+
+# 18. Release Workflow
+
+The production release flow:
 
 ```plaintext
-feature/* → dev → staging → main
-```
-
-Wrong:
-
-```plaintext
-main → direct coding
-```
-
----
-
-# 🏷️ COMMIT MESSAGE FORMAT
-
-## Feature
-
-```bash
-git commit -m "feat: add sample dataset loader"
+Feature Complete
+        ↓
+Merge into dev
+        ↓
+Testing
+        ↓
+Merge into staging
+        ↓
+Validation
+        ↓
+Merge into main
+        ↓
+Production Release
 ```
 
 ---
 
-## Fix
+# 19. Future Git Enhancements
 
-```bash
-git commit -m "fix: resolve upload validation issue"
-```
+Future workflow improvements may include:
 
----
-
-## Docs
-
-```bash
-git commit -m "docs: update README workflow"
-```
+- GitHub Actions
+- CI/CD pipelines
+- Automated testing
+- Automated deployment
+- Branch protection rules
+- Semantic versioning
 
 ---
 
-## Refactor
+# 20. Conclusion
 
-```bash
-git commit -m "refactor: improve analytics pipeline"
+This Git workflow provides a structured development strategy for the Healthcare Data Analysis project.
+
+The workflow improves:
+
+- Stability
+- Collaboration
+- Testing
+- Traceability
+- Release safety
+
+The branch structure ensures:
+- isolated development
+- staged validation
+- safer production releases
 ```
-
----
-
-# 📌 CURRENT FEATURE BRANCHES
-
-```plaintext
-feature/sample-loader
-feature/pdf-export
-feature/dynamic-filters
-```
-
----
-
-# 📌 CURRENT BUGFIX BRANCHES
-
-```plaintext
-bugfix/chart-rendering
-bugfix/upload-validation
-bugfix/pdf-generation
-```
-
----
-
-# 🎯 DEVELOPMENT PHILOSOPHY
-
-Focus on:
-
-- usability
-- analytics
-- reporting
-- maintainability
-- structured workflows
-
-Avoid:
-
-- overengineering
-- unnecessary branches
-- premature AI complexity
-- feature chaos
